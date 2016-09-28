@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>TwitchTournament</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-dark navbar-fixed-top">
+	<a id="title" class="navbar-brand" href=""></a>
+	<ul class="show-tournament nav navbar-nav pull-xs-right">
+		<li class="nav-item"><a href="#" id="nav-new" class="nav-link"><i class="fa fa-file" title="New bracket"></i><span class="hidden-sm-down"> New bracket</span></a></li>
+		<li class="nav-item"><a href="#" id="nav-share" class="nav-link"><i class="fa fa-share" title="Share"></i><span class="hidden-sm-down"> Share</span></a></li>
+	</ul>
+</nav>
+
+<div class="container-fluid">
+	<div id="tournament" class="show-tournament"></div>
+	<div id="edit" class="edit">
+		<div class="edit-info">
+			<p>This app generates a tournament bracket for single elimination tournaments with randomized seeds.</p>
+			<p>The maximum number of participants is limited to 32.</p>
+			<p>If Twitch integration is enabled, the app will display the Twitch avatars of the participants. For this to work, the name of the participant must match their Twitch username. Disable Twitch integration, if you want to use in-game names of the participants.</p>
+			<p>The bracket is stored locally in the browser. If you want to access the bracket from a different device, use the Share button in the upper right corner.</p>
+			<p>The app was designed with streaming in mind, hence the large font size. If the bracket is too big, you can use the browser's zoom feature to zoom out.</p>
+			<ul>
+				<li>To zoom in and out, press <kbd>Ctrl</kbd>+<kbd>+</kbd> / <kbd>-</kbd>.</li>
+				<li>To reset the zoom, press <kbd>Ctrl</kbd>+<kbd>0</kbd>.</li>
+				<li>To toggle the fullscreen mode, press <kbd>F11</kbd>.</li>
+			</ul>
+		</div>
+		<form id="form-edit" class="form-edit">
+			<div class="form-group">
+				<label for="edit-name">Tournament name</label>
+				<input id="edit-name" class="form-control">
+			</div>
+			<div class="form-group">
+				<label for="edit-participants">Participants <span id="edit-participants-total" class="tag tag-default"></span></label>
+				<textarea id="edit-participants" class="form-control" placeholder="One per line"></textarea>
+			</div>
+			<!--<div class="checkbox">
+				<label><input type="checkbox" id="edit-randomize" checked> Randomize seeds</label>
+			</div>-->
+			<div class="checkbox">
+				<label><input type="checkbox" id="edit-thirdplace" checked> Include a third place playoff</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" id="edit-twitch" checked> Twitch integration</label>
+			</div>
+			<button type="submit" class="btn btn-primary btn-lg btn-block">Generate</button>
+		</form>
+	</div>
+</div>
+
+<div id="winner-screen" class="winner-screen">
+	<div class="winner-line">
+		<div class="winner-text">WINNER</div>
+	</div>
+	<div class="winner-avatar">
+		<img id="winner-avatar" src="">
+		<i class="fa fa-trophy"></i>
+	</div>
+	<div id="winner-name" class="winner-name"></div>
+</div>
+
+<script id="tpl-tournament" type="text/template">
+	<div class="bracket {{#if thirdplace}}has-thirdplace{{/if}} {{#if twitch}}has-avatar{{/if}}">
+	{{#each bracket}}
+		<div class="round {{#if @first}}{{#if ../roundzero}}roundzero{{/if}}{{/if}}">
+		{{#each this}}
+			<div class="game {{#if @../last}}{{#if @last}}{{#if ../../thirdplace}}thirdplace{{/if}}{{/if}}{{/if}}">
+			{{#if @../last}}{{#if @last}}{{#if ../../thirdplace}}<header class="header-thirdplace">Third Place Playoff</header>{{/if}}{{/if}}{{/if}}
+			{{#each this}}
+				{{> player (_getPlayer this twitch=../../../twitch)}}
+			{{/each}}
+			</div>
+		{{/each}}
+		</div>
+	{{/each}}
+	</div>
+</script>
+<script id="tpl-player" class="tpl-partial" type="text/template">
+	<div class="player {{#if won}}winner{{/if}} {{#if name}}in{{else}}empty{{/if}}">
+		{{#if twitch}}<div class="avatar"><img src="{{_getAvatar avatar name}}" alt="{{name}}"></div>{{/if}}
+		<div class="won"><i class="won-badge won-badge-next fa fa-angle-right"></i><i class="won-badge won-badge-1 fa fa-trophy"></i><span class="won-badge won-badge-2">2<small>nd</small></span><span class="won-badge won-badge-3">3<small>rd</small></span></div>
+		<div class="name">{{name}}</div>
+	</div>
+</script>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/js/bootstrap.min.js" integrity="sha384-VjEeINv9OSwtWFLAtmc4JCtEJXXBub00gtSnszmspDLCtC0I4z4nqz7rEFbIZLLU" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js" integrity="sha256-rMOSOM5HDzVEMoVZTv2189+RKSTSgY5ZKfTfap7q2zE=" crossorigin="anonymous"></script>
+<script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+body {
+	padding-top: 70px;
+	background-color: #383534;
+	color: #ddd;
+}
+
+.navbar {
+	background-color: #282524;
+}
+.navbar a {
+	color: #c8c8c8 !important;
+}
+.btn,
+.form-control {
+	border-radius: 0 !important;
+}
+
+.edit,
+.show-tournament {
+	display: none;
+}
+
+.bracket {
+	white-space: nowrap;
+}
+.round {
+	display: inline-block;
+	margin-right: 8px;
+	vertical-align: top;
+}
+.round:first-child {
+	display: none;
+}
+.roundzero {
+	display: inline-block !important;
+	padding-top: 25px;
+}
+.roundzero .empty {
+	background-color: transparent !important;
+	cursor: default;
+}
+
+.round:nth-child(3) {
+	padding-top: 55px;
+}
+.round:nth-child(3) .game {
+	margin-bottom: 122px;
+}
+.round:nth-child(4) {
+	padding-top: 165px;
+}
+.round:nth-child(4) .game {
+	margin-bottom: 342px;
+}
+.round:nth-child(5) {
+	padding-top: 385px;
+}
+.round:nth-child(5) .game {
+	margin-bottom: 782px;
+}
+.round:nth-child(6) {
+	padding-top: 825px;
+}
+
+.game {
+	margin-bottom: 12px;
+	width: 300px;
+	overflow: hidden;
+}
+.game:last-child {
+	margin-bottom: 0 !important;
+}
+.round:last-child .game {
+	margin-bottom: 62px;
+}
+.header-thirdplace {
+	font-size: 16px;
+	font-style: italic;
+	font-weight: 600;
+}
+
+.player {
+	position: relative;
+	left: -300px;
+	margin-bottom: 2px;
+	width: 600px;
+	height: 48px;
+	background-color: #484544;
+	cursor: pointer;
+	transition: left .5s, opacity 1s;
+}
+.player:hover {
+	background-color: #585554;
+}
+.player.in {
+	left: 0;
+}
+.player .avatar {
+	display: none;
+}
+.has-avatar .player .avatar {
+	display: block;
+	float: left;
+	width: 48px;
+	height: 48px;
+}
+.has-avatar .player .avatar img {
+	width: 100%;
+}
+.player .name {
+	padding: 0 10px;
+	width: 300px;
+	height: 48px;
+	font-size: 24px;
+	line-height: 46px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.has-avatar .player .name {
+	margin-left: 48px;
+	width: 252px;
+}
+.winner .name,
+.has-thirdplace .round:last-child .game:first-child .loser .name {
+	width: 260px;
+}
+.has-avatar .winner .name,
+.has-thirdplace.has-avatar .round:last-child .game:first-child .loser .name {
+	width: 210px;
+}
+.player .won {
+	float: right;
+	margin-right: 310px;
+}
+.player .won-badge {
+	display: none;
+	font-size: 24px;
+	line-height: 46px;
+	text-align: right;
+}
+.player span.won-badge {
+	font-size: 20px;
+}
+.round:last-child .won-badge-next {
+	display: none;
+}
+.winner .won-badge-next,
+.round:last-child .game:first-child .winner .won-badge-1,
+.has-thirdplace .round:last-child .game:first-child .loser .won-badge-2,
+.has-thirdplace .round:last-child .game:last-child .winner .won-badge-3 {
+	display: inline-block;
+}
+
+.round:last-child .game:first-child .winner {
+	color: #fff;
+	background-color: #449d44;
+}
+.round:last-child .game:first-child .winner:hover {
+	background-color: #5cb85c;
+}
+.loser {
+	opacity: .5;
+}
+.has-thirdplace .round:last-child .game:first-child .loser {
+	opacity: 1;
+}
+
+
+.edit {
+	margin: 0 auto;
+	width: 640px;
+}
+.edit-info {
+	float: right;
+	width: 380px;
+	hyphens: auto;
+}
+.edit-info ul {
+	padding-left: 15px;
+}
+.edit-info kbd {
+	background-color: #282524;
+}
+.form-edit {
+	width: 230px;
+}
+#edit-participants {
+	height: 266px;
+}
+
+
+.winner-screen {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2000;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, .5);
+	opacity: 0;
+	transition: opacity .2s;
+}
+.winner-screen.in {
+	opacity: 1;
+}
+.winner-line {
+	position: absolute;
+	top: 50%;
+	margin-top: 0px;
+	width: 100%;
+	height: 0px;
+	background-color: #449d44;
+	background: linear-gradient(#338c33, #449d44, #5cb85c, #338c33, #227b22);
+	transition: margin-top .3s ease-out, height .3s ease-out;
+}
+.in .winner-line {
+	margin-top: -100px;
+	height: 200px;
+}
+.winner-text {
+	position: relative;
+	left: -100%;
+	width: 100%;
+	font-size: 160px;
+	line-height: 180px;
+	font-style: italic;
+	font-weight: bold;
+	text-align: center;
+	text-shadow: 1px 1px 0 #77c177, 2px 2px 0 #88d288, 3px 3px 0 #88d288, 4px 4px 0 #88d288, 5px 5px 0 #88d288, 6px 6px 0 #88d288;
+	transition: left .4s ease-out .3s;
+}
+.in .winner-text {
+	left: 0;
+}
+.winner-avatar {
+	position: absolute;
+	top: 50%;
+	margin-top: -200px;
+	width: 100%;
+	text-align: center;
+}
+.winner-avatar img {
+	display: none;
+	border: 10px solid gold;
+	box-shadow: 0 15px 30px rgba(0, 0, 0, .5);
+}
+.winner-avatar.has-avatar img {
+	display: inline-block;
+}
+.winner-avatar i {
+	color: gold;
+	font-size: 300px;
+	text-shadow: 0 15px 30px rgba(0, 0, 0, .5);
+}
+.winner-avatar.has-avatar i {
+	display: none;
+}
+.winner-name {
+	position: absolute;
+	top: 50%;
+	margin-top: 128px;
+	width: 100%;
+	color: gold;
+	font-size: 128px;
+	line-height: 128px;
+	font-weight: bold;
+	text-align: center;
+	text-shadow: 0 15px 30px rgba(0, 0, 0, 1);
+}
+.winner-avatar,
+.winner-name {
+	opacity: 0;
+	transition: opacity 2s ease 1s;
+}
+.in .winner-avatar,
+.in .winner-name {
+	opacity: 1;
+}
