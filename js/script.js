@@ -71,19 +71,30 @@ function initTpl() {
 function initEvents() {
 	$('#nav-new').click(function(e) {
 		e.preventDefault();
-		gldata = null;
-		if(location.hash) {
-			history.pushState('', document.title, location.pathname);
+		if(confirm('Discard current bracket and create a new one?')) {
+			gldata = null;
+			if(location.hash) {
+				history.pushState('', document.title, location.pathname);
+			}
+			localStorage.removeItem('gldata');
+			$('.show-tournament').hide();
+			$('#edit').show();
+			$('#edit-name').keyup();
 		}
-		localStorage.removeItem('gldata');
-		$('.show-tournament').hide();
-		$('#edit').show();
-		$('#edit-name').keyup();
 	});
 	$('#nav-share').click(function(e) {
 		e.preventDefault();
 		if(gldata) {
-			prompt('Share', location.href.split('#')[0] + '#' + btoa(JSON.stringify(gldata)));
+			$.ajax({
+				url: 'https://is.gd/create.php?format=json&url=' + encodeURIComponent(location.href.split('#')[0] + '#' + btoa(JSON.stringify(gldata))),
+				success: function(resp) {
+					prompt('Share', resp.shorturl);
+				},
+				error: function() {
+					console.log(arguments);
+					alert('URL shortening API error');
+				}
+			});
 		}
 	});
 	
