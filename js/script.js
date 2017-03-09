@@ -2,7 +2,13 @@ var tplhb = {},
 	config = {
 		maxPlayers: 32
 	},
-	gldata = null;
+	gldata = null,
+	lastShortURL = {
+		long: '',
+		short: ''
+	},
+	isgdError = false,
+	isgdErrorTimeout = null;
 
 $(function() {
 	initTpl();
@@ -85,17 +91,37 @@ function initEvents() {
 	$('#nav-share').click(function(e) {
 		e.preventDefault();
 		if(gldata) {
-			$.ajax({
-				url: 'https://is.gd/create.php?format=json&url=' + encodeURIComponent(location.href.split('#')[0] + '#' + btoa(JSON.stringify(gldata))),
-				dataType: 'json',
-				success: function(resp) {
-					prompt('Share', resp.shorturl);
-				},
-				error: function() {
-					console.log(arguments);
-					alert('URL shortening API error');
+			var longUrl = location.href.split('#')[0] + '#' + btoa(JSON.stringify(gldata));
+			if(lastShortURL.long == longUrl) {
+				prompt('Share', lastShortURL.short);
+			} else {
+				if(isgdError) {
+					alert('URL shortening API error! Please try again in a minute.');
+				} else {
+					$.ajax({
+						url: 'https://is.gd/create.php?format=json&url=' + encodeURIComponent(longUrl),
+						dataType: 'json',
+						success: function(resp) {
+							lastShortURL = {
+								long: longUrl,
+								short: resp.shorturl
+							};
+							prompt('Share', resp.shorturl);
+						},
+						error: function() {
+							console.log(arguments);
+							alert('URL shortening API error! Please try again in a minute.');
+							isgdError = true;
+							if(isgdErrorTimeout) {
+								window.clearTimeout(isgdErrorTimeout);
+							}
+							isgdErrorTimeout = window.setTimeout(function() {
+								isgdError = false;
+							}, 60000);
+						}
+					});
 				}
-			});
+			}
 		}
 	});
 	
