@@ -87,6 +87,7 @@ function initEvents() {
 		if(gldata) {
 			$.ajax({
 				url: 'https://is.gd/create.php?format=json&url=' + encodeURIComponent(location.href.split('#')[0] + '#' + btoa(JSON.stringify(gldata))),
+				dataType: 'json',
 				success: function(resp) {
 					prompt('Share', resp.shorturl);
 				},
